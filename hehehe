@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Invite ❤️</title>
+    <style>
+        :root {
+            --bg: #fff0f3;
+            --main: #ff4d6d;
+            --white: #ffffff;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; display: flex; align-items: center; justify-content: center;
+            height: 100vh; width: 100vw; overflow: hidden;
+        }
+
+        .container { position: relative; z-index: 10; width: 90%; max-width: 400px; text-align: center; }
+
+        h1 { color: var(--main); font-size: 26px; margin-bottom: 30px; font-weight: bold; line-height: 1.4; }
+
+        .btn-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 350px; }
+
+        /* OVAL BUTTONS */
+        .btn {
+            display: flex; align-items: center; justify-content: center;
+            border: none; border-radius: 50px; 
+            font-weight: bold; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.1s ease;
+        }
+
+        #yesBtn { 
+            background: var(--main); color: var(--white); 
+            width: 120px; height: 60px; font-size: 18px;
+            animation: float 3s ease-in-out infinite; 
+        }
+
+        #noBtn { 
+            background: var(--white); color: var(--main); 
+            border: 2px solid var(--main); 
+            width: 120px; height: 60px; font-size: 18px; 
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        #dateBox, #success { display: none; }
+
+        input { 
+            padding: 15px; border: 2px solid var(--main); width: 85%; 
+            font-size: 18px; margin-bottom: 25px; border-radius: 30px; 
+            text-align: center; outline: none; background: white; color: #333;
+        }
+
+        .confirm-btn {
+            background: var(--main); color: white; width: 100%; height: 60px; border-radius: 50px;
+        }
+
+        #success { font-size: 24px; color: var(--main); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="qBox">
+            <h1>Will you go on a date with me?</h1>
+            <div class="btn-wrapper">
+                <button id="yesBtn" class="btn">YES</button>
+                <button id="noBtn" class="btn">NO</button>
+            </div>
+        </div>
+
+        <div id="dateBox">
+            <h1>Pick a date! ❤️</h1>
+            <input type="date" id="dateInput">
+            <button id="confirmBtn" class="btn confirm-btn">CONFIRM DATE</button>
+        </div>
+
+        <div id="success">
+            <h1 id="finalMsg"></h1>
+            <span style="font-size: 80px;">🌸</span>
+        </div>
+    </div>
+
+    <script>
+        // CHANGE TO YOUR NUMBER (e.g., 62... or 1...)
+        var myPhone = "628123456789"; 
+
+        var yes = document.getElementById('yesBtn');
+        var no = document.getElementById('noBtn');
+        var qBox = document.getElementById('qBox');
+        var dBox = document.getElementById('dateBox');
+        
+        var w = 120, h = 60, f = 18, count = 0;
+
+        function handleNo(e) {
+            count++;
+            if (count >= 10) {
+                no.style.display = 'none';
+            } else {
+                no.style.position = 'fixed';
+                no.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+                no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+                no.style.zIndex = "999";
+
+                w += 45; h += 35; f += 5;
+                yes.style.width = w + 'px';
+                yes.style.height = h + 'px';
+                yes.style.fontSize = f + 'px';
+                
+                if(count > 2) yes.style.animation = "none";
+            }
+            if(e && e.preventDefault) e.preventDefault();
+        }
+
+        function handleYes() {
+            qBox.style.display = 'none';
+            dBox.style.display = 'block';
+        }
+
+        // Desktop
+        yes.onclick = handleYes;
+        no.onclick = handleNo;
+
+        // Mobile
+        yes.ontouchstart = function(e) { e.preventDefault(); handleYes(); };
+        no.ontouchstart = handleNo;
+
+        document.getElementById('confirmBtn').onclick = function() {
+            var val = document.getElementById('dateInput').value;
+            if(!val) return alert("Please pick a date! ❤️");
+            
+            var dateObj = new Date(val);
+            var options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            var formattedDate = dateObj.toLocaleDateString('en-US', options);
+
+            dBox.style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('finalMsg').innerHTML = "IT'S A DATE!<br><br>" + formattedDate;
+
+            var text = "I accepted your invitation! ❤️ Let's go out on " + formattedDate;
+            setTimeout(function() {
+                window.location.href = "https://wa.me/" + myPhone + "?text=" + encodeURIComponent(text);
+            }, 1500);
+        };
+    </script>
+</body>
+</html>
