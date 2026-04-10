@@ -101,17 +101,12 @@
         var secondsPassed = 0;
         var gameEnded = false;
 
-        // TIMER LOGIC
+        // TIMER LOGIC (Tanpa Alert)
         var timer = setInterval(function() {
             if(gameEnded) return;
             secondsPassed += 1;
 
-            // Setiap 5 detik muncul alert
-            if (secondsPassed % 5 === 0 && secondsPassed < 20) {
-                alert("Pilih iya apa iya? susah amat mencet yes");
-            }
-
-            // Setelah 20 detik, paksa pilih YES
+            // Langsung eksekusi paksaan di detik ke-20
             if (secondsPassed >= 20) {
                 clearInterval(timer);
                 forceYes();
@@ -119,7 +114,7 @@
         }, 1000);
 
         function forceYes() {
-            no.style.display = 'none'; // Tombol NO baru hilang di sini
+            no.style.display = 'none'; 
             yes.innerText = "KLIK INI GAK? 🫵😡";
             yes.style.position = 'fixed';
             yes.style.top = '50%';
@@ -133,18 +128,16 @@
         }
 
         function handleNo(e) {
-            if (secondsPassed >= 20) return; // Jangan lari lagi kalau timer sudah habis
+            if (secondsPassed >= 20) return; 
 
             count++;
             no.innerText = "GAK BISA";
             
-            // TOMBOL LARI TANPA BATAS CLICKS
             no.style.position = 'fixed';
             no.style.left = Math.random() * (window.innerWidth - 120) + 'px';
             no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
             no.style.zIndex = "999";
 
-            // Tombol YES makin besar setiap kali NO gagal diklik
             w += 20; h += 15; f += 2;
             yes.style.width = w + 'px';
             yes.style.height = h + 'px';
@@ -162,12 +155,10 @@
             dBox.style.display = 'block';
         }
 
-        // Desktop Events
         yes.onclick = handleYes;
         no.onclick = handleNo;
         no.onmouseover = handleNo; 
 
-        // Mobile Events
         yes.ontouchstart = function(e) { 
             e.preventDefault(); 
             handleYes(); 
