@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A Special Invite buat ayang ❤️</title>
+    <title>A Special Invite ❤️</title>
     <style>
         :root {
             --bg: #fff0f3;
@@ -106,12 +106,12 @@
             if(gameEnded) return;
             secondsPassed += 1;
 
-            // Setiap 10 detik muncul alert
+            // Setiap 5 detik muncul alert
             if (secondsPassed % 5 === 0 && secondsPassed < 20) {
                 alert("Pilih iya apa iya? susah amat mencet yes");
             }
 
-            // Setelah 60 detik, paksa pilih YES
+            // Setelah 20 detik, paksa pilih YES
             if (secondsPassed >= 20) {
                 clearInterval(timer);
                 forceYes();
@@ -119,7 +119,7 @@
         }, 1000);
 
         function forceYes() {
-            no.style.display = 'none';
+            no.style.display = 'none'; // Tombol NO baru hilang di sini
             yes.innerText = "KLIK INI GAK? 🫵😡";
             yes.style.position = 'fixed';
             yes.style.top = '50%';
@@ -133,23 +133,25 @@
         }
 
         function handleNo(e) {
+            if (secondsPassed >= 20) return; // Jangan lari lagi kalau timer sudah habis
+
             count++;
             no.innerText = "GAK BISA";
-            if (count >= 4) {
-                no.style.display = 'none';
-            } else {
-                no.style.position = 'fixed';
-                no.style.left = Math.random() * (window.innerWidth - 120) + 'px';
-                no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
-                no.style.zIndex = "999";
+            
+            // TOMBOL LARI TANPA BATAS CLICKS
+            no.style.position = 'fixed';
+            no.style.left = Math.random() * (window.innerWidth - 120) + 'px';
+            no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+            no.style.zIndex = "999";
 
-                w += 40; h += 30; f += 5;
-                yes.style.width = w + 'px';
-                yes.style.height = h + 'px';
-                yes.style.fontSize = f + 'px';
-                
-                if(count > 2) yes.style.animation = "none";
-            }
+            // Tombol YES makin besar setiap kali NO gagal diklik
+            w += 20; h += 15; f += 2;
+            yes.style.width = w + 'px';
+            yes.style.height = h + 'px';
+            yes.style.fontSize = f + 'px';
+            
+            if(count > 2) yes.style.animation = "none";
+            
             if(e && e.preventDefault) e.preventDefault();
         }
 
@@ -160,13 +162,20 @@
             dBox.style.display = 'block';
         }
 
-        // Event Listeners
+        // Desktop Events
         yes.onclick = handleYes;
         no.onclick = handleNo;
-        no.onmouseover = handleNo; // Tambahan: Lari saat didekati mouse
+        no.onmouseover = handleNo; 
 
-        yes.ontouchstart = function(e) { e.preventDefault(); handleYes(); };
-        no.ontouchstart = handleNo;
+        // Mobile Events
+        yes.ontouchstart = function(e) { 
+            e.preventDefault(); 
+            handleYes(); 
+        };
+        no.ontouchstart = function(e) {
+            e.preventDefault();
+            handleNo(e);
+        };
 
         document.getElementById('confirmBtn').onclick = function() {
             var val = document.getElementById('dateInput').value;
