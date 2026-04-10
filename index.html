@@ -24,20 +24,20 @@
 
         .btn-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 350px; }
 
-        /* OVAL BUTTONS */
         .btn {
             display: flex; align-items: center; justify-content: center;
             border: none; border-radius: 50px; 
             font-weight: bold; cursor: pointer; text-transform: uppercase;
             box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
             -webkit-tap-highlight-color: transparent;
-            transition: transform 0.1s ease;
+            transition: all 0.2s ease;
         }
 
         #yesBtn { 
             background: var(--main); color: var(--white); 
             width: 120px; height: 60px; font-size: 18px;
             animation: float 3s ease-in-out infinite; 
+            z-index: 100;
         }
 
         #noBtn { 
@@ -71,7 +71,7 @@
 
     <div class="container">
         <div id="qBox">
-            <h1>Will you go on a date with me?</h1>
+            <h1 id="mainTitle">main yuk ayyy, kangen 👉👈</h1>
             <div class="btn-wrapper">
                 <button id="yesBtn" class="btn">YES</button>
                 <button id="noBtn" class="btn">NO</button>
@@ -91,19 +91,51 @@
     </div>
 
     <script>
-        // CHANGE TO YOUR NUMBER (e.g., 62... or 1...)
         var myPhone = "6281912565837"; 
-
         var yes = document.getElementById('yesBtn');
         var no = document.getElementById('noBtn');
         var qBox = document.getElementById('qBox');
         var dBox = document.getElementById('dateBox');
         
         var w = 120, h = 60, f = 18, count = 0;
+        var secondsPassed = 0;
+        var gameEnded = false;
+
+        // TIMER LOGIC
+        var timer = setInterval(function() {
+            if(gameEnded) return;
+            secondsPassed += 1;
+
+            // Setiap 10 detik muncul alert
+            if (secondsPassed % 5 === 0 && secondsPassed < 20) {
+                alert("Pilih iya apa iya? susah amat mencet yes");
+            }
+
+            // Setelah 60 detik, paksa pilih YES
+            if (secondsPassed >= 20) {
+                clearInterval(timer);
+                forceYes();
+            }
+        }, 1000);
+
+        function forceYes() {
+            no.style.display = 'none';
+            yes.innerText = "KLIK INI GAK? 🫵😡";
+            yes.style.position = 'fixed';
+            yes.style.top = '50%';
+            yes.style.left = '50%';
+            yes.style.transform = 'translate(-50%, -50%)';
+            yes.style.width = '90vw';
+            yes.style.height = '40vh';
+            yes.style.fontSize = '40px';
+            yes.style.animation = 'none';
+            document.getElementById('mainTitle').innerText = "Tombol tak gedein nek kurang jelas";
+        }
 
         function handleNo(e) {
             count++;
-            if (count >= 10) {
+            no.innerText = "GAK BISA";
+            if (count >= 4) {
                 no.style.display = 'none';
             } else {
                 no.style.position = 'fixed';
@@ -111,7 +143,7 @@
                 no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
                 no.style.zIndex = "999";
 
-                w += 45; h += 35; f += 5;
+                w += 40; h += 30; f += 5;
                 yes.style.width = w + 'px';
                 yes.style.height = h + 'px';
                 yes.style.fontSize = f + 'px';
@@ -122,21 +154,23 @@
         }
 
         function handleYes() {
+            gameEnded = true;
+            clearInterval(timer);
             qBox.style.display = 'none';
             dBox.style.display = 'block';
         }
 
-        // Desktop
+        // Event Listeners
         yes.onclick = handleYes;
         no.onclick = handleNo;
+        no.onmouseover = handleNo; // Tambahan: Lari saat didekati mouse
 
-        // Mobile
         yes.ontouchstart = function(e) { e.preventDefault(); handleYes(); };
         no.ontouchstart = handleNo;
 
         document.getElementById('confirmBtn').onclick = function() {
             var val = document.getElementById('dateInput').value;
-            if(!val) return alert("Please pick a date! ❤️");
+            if(!val) return alert("nahh, ga perlu jual mahal ish, shilakan dipilih ❤️");
             
             var dateObj = new Date(val);
             var options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
@@ -146,7 +180,7 @@
             document.getElementById('success').style.display = 'block';
             document.getElementById('finalMsg').innerHTML = "IT'S A DATE!<br><br>" + formattedDate;
 
-            var text = "aku mau nge date satu hari ❤️ Jogja, jemput ya ayy " + formattedDate;
+            var text = "jemput ya ayy ❤ " + formattedDate;
             setTimeout(function() {
                 window.location.href = "https://wa.me/" + myPhone + "?text=" + encodeURIComponent(text);
             }, 1500);
