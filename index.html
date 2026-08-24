@@ -1,49 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A Special Invite ❤️</title>
     <style>
         :root {
-            --bg: #fff0f3;
-            --main: #ff4d6d;
-            --white: #ffffff;
+            --bg-top: #fff0f6;
+            --bg-bottom: #ffe3ee;
+            --rose: #ff5c8a;
+            --rose-deep: #c9184a;
+            --rose-soft: #ffd1e0;
+            --gold: #f7b955;
+            --white: #fffdfd;
+            --ink: #6b3f4d;
         }
 
-        body { 
-            background-color: var(--bg); 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; display: flex; align-items: center; justify-content: center;
-            height: 100vh; width: 100vw; overflow: hidden;
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            overflow: hidden;
         }
 
-        .container { position: relative; z-index: 10; width: 90%; max-width: 400px; text-align: center; }
+        body {
+            font-family: 'Quicksand', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 50% 0%, var(--bg-top), var(--bg-bottom) 70%);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
 
-        h1 { color: var(--main); font-size: 26px; margin-bottom: 30px; font-weight: bold; line-height: 1.4; }
+        /* ---------- Ambient bokeh blobs (desktop depth) ---------- */
+        .bokeh {
+            position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+            filter: blur(2px); opacity: 0.55;
+        }
+        .bokeh.b1 { width: 260px; height: 260px; background: radial-gradient(circle, #ffd1e0, transparent 70%); top: -60px; left: -60px; }
+        .bokeh.b2 { width: 340px; height: 340px; background: radial-gradient(circle, #ffe9f1, transparent 70%); bottom: -100px; right: -80px; }
+        .bokeh.b3 { width: 200px; height: 200px; background: radial-gradient(circle, #fff3d6, transparent 70%); top: 30%; right: 6%; display: none; }
 
-        .btn-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 350px; }
+        /* ---------- Floating petals background ---------- */
+        .petal-field {
+            position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1;
+        }
+
+        .petal {
+            position: absolute;
+            top: -10%;
+            font-size: 22px;
+            opacity: 0.75;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 2px 3px rgba(201, 24, 78, 0.15));
+        }
+
+        @keyframes fall {
+            0%   { transform: translateY(0) translateX(0) rotate(0deg); }
+            50%  { transform: translateY(55vh) translateX(20px) rotate(180deg); }
+            100% { transform: translateY(115vh) translateX(-15px) rotate(360deg); }
+        }
+
+        /* ---------- Card ---------- */
+        .container {
+            position: relative; z-index: 10;
+            width: 90%; max-width: 400px;
+            text-align: center;
+            background: var(--white);
+            border-radius: 32px;
+            padding: 40px 28px 34px;
+            box-shadow: 0 20px 45px rgba(201, 24, 78, 0.16), 0 2px 8px rgba(201, 24, 78, 0.08);
+            border: 1px solid #ffe1ec;
+        }
+
+        .corner-flower {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.9;
+        }
+        .corner-flower.tl { top: -14px; left: -10px; transform: rotate(-15deg); }
+        .corner-flower.br { bottom: -14px; right: -10px; transform: rotate(160deg); }
+
+        .content-grid {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Decorative panel: compact strip on mobile, full column on desktop */
+        .hero-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .bouquet-art {
+            font-size: 30px;
+            letter-spacing: 4px;
+            margin-bottom: 4px;
+            animation: sway 4s ease-in-out infinite;
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .hero-copy { display: none; }
+        .divider { display: none; }
+
+        h1 {
+            color: var(--rose-deep);
+            font-size: 24px;
+            margin: 0 0 22px;
+            font-weight: 700;
+            line-height: 1.5;
+            letter-spacing: 0.2px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .action-panel { width: 100%; }
+
+        .btn-wrapper { display: flex; justify-content: center; align-items: center; gap: 18px; min-height: 190px; }
 
         .btn {
             display: flex; align-items: center; justify-content: center;
-            border: none; border-radius: 50px; 
-            font-weight: bold; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
+            border: none; border-radius: 50px;
+            font-weight: 700; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 0.5px;
             -webkit-tap-highlight-color: transparent;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        #yesBtn { 
-            background: var(--main); color: var(--white); 
-            width: 120px; height: 60px; font-size: 18px;
-            animation: float 3s ease-in-out infinite; 
+        #yesBtn {
+            background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+            color: var(--white);
+            width: 130px; height: 62px; font-size: 17px;
+            box-shadow: 0 10px 22px rgba(255, 92, 138, 0.4);
+            animation: float 3s ease-in-out infinite;
             z-index: 100;
+            transition: width 0.45s cubic-bezier(.34,1.2,.64,1),
+                        height 0.45s cubic-bezier(.34,1.2,.64,1),
+                        font-size 0.45s cubic-bezier(.34,1.2,.64,1),
+                        border-radius 0.45s ease, box-shadow 0.45s ease,
+                        transform 0.2s ease;
+        }
+        #yesBtn:active { transform: scale(0.96); }
+
+        /* ---------- Forced-YES final state ---------- */
+        #yesBtn.forced {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 46px;
+            background: linear-gradient(160deg, var(--rose) 0%, var(--rose-deep) 100%);
+            box-shadow: 0 22px 55px rgba(201, 24, 78, 0.38),
+                        0 0 0 10px rgba(255, 209, 224, 0.55);
+            animation: pulseGlow 2.2s ease-in-out infinite;
+            padding: 20px;
+            line-height: 1.35;
+        }
+        #yesBtn.forced .forced-emoji { font-size: 1.6em; display: block; }
+        #yesBtn.forced .forced-text { font-size: 0.55em; letter-spacing: 1px; }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 22px 55px rgba(201, 24, 78, 0.38),
+                            0 0 0 10px rgba(255, 209, 224, 0.55);
+            }
+            50% {
+                box-shadow: 0 26px 65px rgba(201, 24, 78, 0.45),
+                            0 0 0 18px rgba(255, 209, 224, 0.32);
+            }
         }
 
-        #noBtn { 
-            background: var(--white); color: var(--main); 
-            border: 2px solid var(--main); 
-            width: 120px; height: 60px; font-size: 18px; 
+        #noBtn {
+            background: var(--white); color: var(--rose-deep);
+            border: 2px solid var(--rose-soft);
+            width: 130px; height: 62px; font-size: 17px;
+            box-shadow: 0 8px 16px rgba(201, 24, 78, 0.08);
         }
 
         @keyframes float {
@@ -54,59 +196,229 @@
 
         #dateBox, #success { display: none; }
 
-        input { 
-            padding: 15px; border: 2px solid var(--main); width: 85%; 
-            font-size: 18px; margin-bottom: 25px; border-radius: 30px; 
-            text-align: center; outline: none; background: white; color: #333;
+        input {
+            padding: 15px; border: 2px solid var(--rose-soft); width: 85%;
+            font-size: 17px; margin-bottom: 25px; border-radius: 30px;
+            text-align: center; outline: none; background: #fff8fb; color: var(--ink);
+            font-family: inherit;
         }
+        input:focus { border-color: var(--rose); }
 
         .confirm-btn {
-            background: var(--main); color: white; width: 100%; height: 60px; border-radius: 50px;
+            background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+            color: white; width: 100%; height: 60px; border-radius: 50px;
+            box-shadow: 0 10px 22px rgba(255, 92, 138, 0.35);
         }
 
-        #success { font-size: 24px; color: var(--main); font-weight: bold; }
+        #success h1 { margin-bottom: 6px; }
+        #success .sub { color: var(--ink); opacity: 0.75; font-size: 14px; margin-bottom: 18px; }
+
+        /* ---------- Popup burst on YES ---------- */
+        #burstLayer {
+            position: fixed; inset: 0; pointer-events: none; z-index: 200; overflow: hidden;
+        }
+        .burst-item {
+            position: absolute;
+            font-size: 24px;
+            animation: burstUp 1.4s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes burstUp {
+            0%   { transform: translate(0,0) scale(0.5) rotate(0deg); opacity: 0; }
+            15%  { opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--rot)); opacity: 0; }
+        }
+
+        /* ================= DESKTOP LAYOUT ================= */
+        @media (min-width: 860px) {
+            .bokeh.b3 { display: block; }
+
+            .container {
+                max-width: 780px;
+                padding: 0;
+                border-radius: 36px;
+                overflow: hidden;
+            }
+
+            .content-grid {
+                flex-direction: row;
+                align-items: stretch;
+            }
+
+            .hero-panel {
+                flex: 0 0 44%;
+                background: linear-gradient(155deg, var(--rose) 0%, var(--rose-deep) 100%);
+                color: var(--white);
+                padding: 56px 34px;
+                margin-bottom: 0;
+                justify-content: center;
+                align-items: flex-start;
+                text-align: left;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .hero-panel::before {
+                content: "🌸";
+                position: absolute;
+                font-size: 160px;
+                opacity: 0.14;
+                right: -30px;
+                bottom: -40px;
+                transform: rotate(-12deg);
+            }
+
+            .hero-panel .eyebrow { color: #ffe1ec; }
+
+            .bouquet-art {
+                font-size: 40px;
+                letter-spacing: 8px;
+                margin-bottom: 14px;
+            }
+
+            .hero-panel h1 {
+                color: var(--white);
+                font-size: 32px;
+                text-align: left;
+                margin: 0 0 16px;
+            }
+
+            .hero-copy {
+                display: block;
+                color: #ffe6ee;
+                font-size: 15px;
+                line-height: 1.7;
+                max-width: 280px;
+            }
+
+            .action-panel {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 56px 48px;
+                background: var(--white);
+            }
+
+            .action-panel .eyebrow,
+            .action-panel h1 { display: none; }
+
+            .action-panel .btn-wrapper { min-height: 0; justify-content: flex-start; gap: 24px; }
+
+            #yesBtn, #noBtn { width: 150px; height: 68px; font-size: 18px; }
+
+            #dateBox, #success { text-align: left; }
+            #dateBox .eyebrow, #success .eyebrow { display: inline-block; }
+            #dateBox h1, #success h1 { display: block; text-align: left; }
+
+            input { width: 100%; }
+
+            .corner-flower { display: none; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="bokeh b1"></div>
+    <div class="bokeh b2"></div>
+    <div class="bokeh b3"></div>
+    <div class="petal-field" id="petalField"></div>
+    <div id="burstLayer"></div>
+
     <div class="container">
-        <div id="qBox">
-            <h1 id="mainTitle">main yuk ayyy, kangen 👉👈</h1>
-            <div class="btn-wrapper">
-                <button id="yesBtn" class="btn">YES</button>
-                <button id="noBtn" class="btn">NO</button>
+        <span class="corner-flower tl">🌸</span>
+        <span class="corner-flower br">🌸</span>
+
+        <div class="content-grid">
+            <div class="hero-panel">
+                <div class="bouquet-art">🌷🌸🌺</div>
+                <span class="eyebrow">Untuk kamu</span>
+                <h1 id="mainTitle">main yuk ayyy, kangen 👉👈</h1>
+                <p class="hero-copy">Sebuah ajakan kecil, dibungkus bunga dan sedikit kangen. Semoga jawabannya YES ya 🌷</p>
             </div>
-        </div>
 
-        <div id="dateBox">
-            <h1>nahhhh, kan ga perlu sok nolak ❤️</h1>
-            <input type="date" id="dateInput">
-            <button id="confirmBtn" class="btn confirm-btn">CONFIRM DATE</button>
-        </div>
+            <div class="action-panel">
+                <div id="qBox">
+                    <div class="btn-wrapper">
+                        <button id="yesBtn" class="btn">YES</button>
+                        <button id="noBtn" class="btn">NO</button>
+                    </div>
+                </div>
 
-        <div id="success">
-            <h1 id="finalMsg"></h1>
-            <span style="font-size: 80px;">🌸</span>
+                <div id="dateBox">
+                    <span class="eyebrow">Yeay!</span>
+                    <h1>nahhhh, kan ga perlu sok nolak ❤️</h1>
+                    <input type="date" id="dateInput">
+                    <button id="confirmBtn" class="btn confirm-btn">CONFIRM DATE</button>
+                </div>
+
+                <div id="success">
+                    <span class="eyebrow">Sudah pasti</span>
+                    <h1 id="finalMsg"></h1>
+                    <div class="sub">sampai ketemu ya 🌷</div>
+                    <span style="font-size: 80px;">🌸</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        var myPhone = "0812345678"; 
+        var myPhone = "0812345678";
         var yes = document.getElementById('yesBtn');
         var no = document.getElementById('noBtn');
         var qBox = document.getElementById('qBox');
         var dBox = document.getElementById('dateBox');
-        
-        var w = 120, h = 60, f = 18, count = 0;
+
+        var w = 130, h = 62, f = 17, count = 0;
         var secondsPassed = 0;
         var gameEnded = false;
 
-        // TIMER LOGIC (Tanpa Alert)
+        // ---------- Floating petals background (decorative only) ----------
+        (function spawnPetals() {
+            var flowers = ['🌸', '🌷', '🌺', '💮', '🌼', '✨', '💗'];
+            var field = document.getElementById('petalField');
+            var total = window.innerWidth < 480 ? 16 : (window.innerWidth < 860 ? 22 : 34);
+            for (var i = 0; i < total; i++) {
+                var p = document.createElement('span');
+                p.className = 'petal';
+                p.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.fontSize = (14 + Math.random() * 16) + 'px';
+                p.style.animationDuration = (8 + Math.random() * 10) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                field.appendChild(p);
+            }
+        })();
+
+        function petalBurst() {
+            var flowers = ['🌸', '💗', '🌷', '✨', '💮'];
+            var layer = document.getElementById('burstLayer');
+            var cx = window.innerWidth / 2;
+            var cy = window.innerHeight / 2;
+            for (var i = 0; i < 24; i++) {
+                var el = document.createElement('span');
+                el.className = 'burst-item';
+                el.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                var angle = Math.random() * Math.PI * 2;
+                var dist = 120 + Math.random() * 220;
+                el.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+                el.style.setProperty('--dy', (Math.sin(angle) * dist - 60) + 'px');
+                el.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+                el.style.left = (cx - 12) + 'px';
+                el.style.top = (cy - 12) + 'px';
+                el.style.animationDelay = (Math.random() * 0.2) + 's';
+                layer.appendChild(el);
+                (function(node) {
+                    setTimeout(function() { node.remove(); }, 1800);
+                })(el);
+            }
+        }
+
+        // ---------- TIMER LOGIC (Tanpa Alert) ----------
         var timer = setInterval(function() {
-            if(gameEnded) return;
+            if (gameEnded) return;
             secondsPassed += 1;
 
-            // Langsung eksekusi paksaan di detik ke-20
             if (secondsPassed >= 20) {
                 clearInterval(timer);
                 forceYes();
@@ -114,54 +426,56 @@
         }, 1000);
 
         function forceYes() {
-            no.style.display = 'none'; 
-            yes.innerText = "KLIK INI GAK? 🫵😡";
+            no.style.display = 'none';
             yes.style.position = 'fixed';
             yes.style.top = '50%';
             yes.style.left = '50%';
             yes.style.transform = 'translate(-50%, -50%)';
-            yes.style.width = '90vw';
-            yes.style.height = '40vh';
-            yes.style.fontSize = '40px';
+            yes.style.width = 'min(78vw, 340px)';
+            yes.style.height = 'min(30vh, 260px)';
+            yes.style.fontSize = '26px';
             yes.style.animation = 'none';
-            document.getElementById('mainTitle').innerText = "Tombol tak gedein nek kurang jelas";
+            yes.classList.add('forced');
+            yes.innerHTML = '<span class="forced-emoji">💗</span><span class="forced-text">KETUK DI SINI YA</span>';
+            document.getElementById('mainTitle').innerText = "udah gede kok tombolnya, tinggal diketuk aja ✨";
         }
 
         function handleNo(e) {
-            if (secondsPassed >= 20) return; 
+            if (secondsPassed >= 20) return;
 
             count++;
             no.innerText = "GAK BISA";
-            
+
             no.style.position = 'fixed';
-            no.style.left = Math.random() * (window.innerWidth - 120) + 'px';
-            no.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+            no.style.left = Math.random() * (window.innerWidth - 130) + 'px';
+            no.style.top = Math.random() * (window.innerHeight - 82) + 'px';
             no.style.zIndex = "999";
 
             w += 20; h += 15; f += 2;
             yes.style.width = w + 'px';
             yes.style.height = h + 'px';
             yes.style.fontSize = f + 'px';
-            
-            if(count > 2) yes.style.animation = "none";
-            
-            if(e && e.preventDefault) e.preventDefault();
+
+            if (count > 2) yes.style.animation = "none";
+
+            if (e && e.preventDefault) e.preventDefault();
         }
 
         function handleYes() {
             gameEnded = true;
             clearInterval(timer);
+            petalBurst();
             qBox.style.display = 'none';
             dBox.style.display = 'block';
         }
 
         yes.onclick = handleYes;
         no.onclick = handleNo;
-        no.onmouseover = handleNo; 
+        no.onmouseover = handleNo;
 
-        yes.ontouchstart = function(e) { 
-            e.preventDefault(); 
-            handleYes(); 
+        yes.ontouchstart = function(e) {
+            e.preventDefault();
+            handleYes();
         };
         no.ontouchstart = function(e) {
             e.preventDefault();
@@ -170,8 +484,8 @@
 
         document.getElementById('confirmBtn').onclick = function() {
             var val = document.getElementById('dateInput').value;
-            if(!val) return alert("nahh, ga perlu jual mahal ish, shilakan dipilih ❤️");
-            
+            if (!val) return alert("nahh, ga perlu jual mahal ish, shilakan dipilih ❤️");
+
             var dateObj = new Date(val);
             var options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
             var formattedDate = dateObj.toLocaleDateString('en-US', options);
