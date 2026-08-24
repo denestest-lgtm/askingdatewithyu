@@ -85,13 +85,16 @@
             flex-direction: column;
         }
 
-        /* Decorative panel: compact strip on mobile, full column on desktop */
+        /* Decorative panel: hidden on mobile (title lives inside qBox there), full column on desktop */
         .hero-panel {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             margin-bottom: 6px;
         }
+
+        /* Mobile-only heading shown inside qBox, hidden again on desktop by .action-panel h1/.eyebrow rules */
+        .mobile-heading { margin-bottom: 4px; }
 
         .bouquet-art {
             font-size: 30px;
@@ -246,6 +249,7 @@
             }
 
             .hero-panel {
+                display: flex;
                 flex: 0 0 44%;
                 background: linear-gradient(155deg, var(--rose) 0%, var(--rose-deep) 100%);
                 color: var(--white);
@@ -257,6 +261,8 @@
                 position: relative;
                 overflow: hidden;
             }
+
+            .mobile-heading { display: none; }
 
             .hero-panel::before {
                 content: "🌸";
@@ -333,12 +339,17 @@
             <div class="hero-panel">
                 <div class="bouquet-art">🌷🌸🌺</div>
                 <span class="eyebrow">Untuk kamu</span>
-                <h1 id="mainTitle">main yuk ayyy, kangen 👉👈</h1>
+                <h1 class="js-main-title">main yuk ayyy, kangen 👉👈</h1>
                 <p class="hero-copy">Sebuah ajakan kecil, dibungkus bunga dan sedikit kangen. Semoga jawabannya YES ya 🌷</p>
             </div>
 
             <div class="action-panel">
                 <div id="qBox">
+                    <div class="mobile-heading">
+                        <div class="bouquet-art">🌷🌸🌺</div>
+                        <span class="eyebrow">Untuk kamu</span>
+                        <h1 class="js-main-title">main yuk ayyy, kangen 👉👈</h1>
+                    </div>
                     <div class="btn-wrapper">
                         <button id="yesBtn" class="btn">YES</button>
                         <button id="noBtn" class="btn">NO</button>
@@ -437,7 +448,9 @@
             yes.style.animation = 'none';
             yes.classList.add('forced');
             yes.innerHTML = '<span class="forced-emoji">💗</span><span class="forced-text">KETUK DI SINI YA</span>';
-            document.getElementById('mainTitle').innerText = "udah gede kok tombolnya, tinggal diketuk aja ✨";
+            document.querySelectorAll('.js-main-title').forEach(function(el) {
+                el.innerText = "udah gede kok tombolnya, tinggal diketuk aja ✨";
+            });
         }
 
         function handleNo(e) {
